@@ -1,0 +1,745 @@
+:root {
+  --primary: #b6895b;
+  --bg: #010101;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: none; /* ini berguna untuk kita ngasih style form atau button */
+  border: none; /* supaya kita punya kendali atas semua bordernya */
+  text-decoration: none; /*supaya gak ada garis bawahnya ketika kita bikin link*/
+}
+html {
+  /* ketika ingin scroll dengan smooth animasinya maka harus tambahkan 1 baris css nya yaitu dibagian html di css */
+  /* dan tambahkan scroll-behavior: smooth ;*/
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: var(--bg);
+  color: #fff;
+  /* min-height: 5000px; */
+  /* diatas itu min-height agar halamannya bisa di scroll */
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.4rem 7%;
+  background-color: rgba(1, 1, 1, 0.8); /* agar ada garis dibawah*/
+  border-bottom: 1px solid #513c28;
+  position: fixed; /* jgn lupa klo posisi nya fixed harus dikasih top left right nya 0 agar tarim menarik ke posisi yang benar */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999; /* ketika ingin membuat navbar selalu diatas kita kasih yang besar sehingga ga ada elemen lain yang ngalahin urutan tumpukannya */
+}
+
+.navbar .navbar-logo {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+  font-style: italic;
+}
+/* tulisan kata senjanya diubah warnanya */
+.navbar .navbar-logo span {
+  color: var(--primary);
+}
+
+.navbar .navbar-nav a {
+  color: #fff;
+  display: inline-block;
+  font-size: 1.3rem;
+  margin: 0 1rem;
+}
+/* ketika di hover warnanya berubah */
+.navbar .navbar-nav a:hover {
+  color: var(--primary);
+}
+/* ketika kita hover navbar nya ada animasi garis dibawah */
+
+.navbar .navbar-nav a::after {
+  content: "";
+  display: block;
+  padding-bottom: 0.5rem;
+  border-bottom: 0.1rem solid var(--primary);
+  transform: scaleX(0);
+  transition: 0.2s linear;
+}
+.navbar .navbar-nav a:hover::after {
+  transform: scaleX(0.5);
+}
+.navbar .navbar-extra a {
+  color: #fff;
+  margin: 0 0.5rem;
+}
+.navbar .navbar-extra a:hover {
+  color: var(--primary);
+}
+/* kenapa kita butuh id humbergur karena nanti kita butuh javascript untuk menangani saat di klik */
+#hamburger-menu {
+  display: none;
+}
+/* Navbar search form */
+.navbar .search-form {
+  /* yg pertama kita akan bikin letaknya absolute
+  karena kita pgn bikin letaknya ngga biasa yah untuk mempermudah maka dari itu kita make position nya absolute */
+  position: absolute;
+  top: 100%;
+  right: 7%;
+  background-color: #fff;
+  width: 50rem;
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  transform: scaleY(0); /*sumbu y atau vertikalnya itu 0*/
+  /* jadi elemennya tinggi nya 0 */
+  transform-origin: top; /*apa itu transform origin? itu untuk menentukan
+ sumbunya atau porosnya kita set ke top sehingga nanti ktika kita
+ bikin dia ukurannya normal jadi kotak lagi kita bisa animasikan seolah-olah
+ dia muncul dari atas karena klo g pake transform origin nanti animasinya muncul dari tengah penjelasan lanjut ada dibawah*/
+  /* kalo mau ada animasinya tinggal ditambahin transition */
+  transition: 0.3s;
+  /* disni ketika di inspect di class search-form ketika ditambahkan kata active maka bar search nya muncul dan ketika itu dihapus akan hilang
+seolah2 muncul dri atas pdahal cuma merubah scale nya yg tdinya 0 menjadi 1 
+namun kita gamau kasih classnya manual seperti tdi kan pasti pgn pada saat ikon search di klik bar searchnya keluar dan di klik sekali lagi bar searchnya hilang 
+oleh karena itu kita harus memakai javascript untuk secara interaktif memberi dan menghilangkan class active manual yg di inspek tadi secara otomatis */
+}
+/* Terus cara munculin nya gmn? cara munculinnya ketika nanti elemen search nya
+ini kita kasih kelas aktif yaitu kelas dibawah ini */
+.navbar .search-form.active {
+  /* kalo misalnya elemen ini ada kelas active nya maka kita munculin kita blikin lagi transformnya (1) jadi ukuran normal */
+  transform: scaleY(1);
+  /* disini awalnya ga keliatan terus kalo kita cari dengan tekan ctrl + shift + i */
+}
+.navbar .search-form input {
+  height: 100%;
+  width: 100%;
+  font-size: 1.6rem;
+  color: var(--bg);
+  padding: 1rem;
+}
+.navbar .search-form label {
+  cursor: pointer;
+  font-size: 2rem;
+  margin-right: 1.5rem;
+  color: var(--bg);
+}
+/* selanjutnya yang akan kita lakukan adalah kita akan
+kasih ubah di bagian search formnya kembali ke atas tambahkan transform scaleY(0)*/
+
+/* Shopping cart */
+#shopping-cart-button {
+  position: relative;
+}
+#shopping-cart-button .quantity-badge {
+  display: inline-block;
+  padding: 1px 5px;
+  background-color: red;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  position: absolute;
+  top: 0;
+  right: -10px;
+}
+.shopping-cart {
+  position: absolute;
+  top: 100%;
+  right: -100%;
+  height: 100vh;
+  width: 35rem;
+  padding: 0 1.5rem;
+  background-color: #fff;
+  color: var(--bg);
+  transition: 0.3s;
+}
+.shopping-cart.active {
+  right: 0;
+}
+.shopping-cart .cart-item {
+  margin: 2rem 0;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding-bottom: 1rem;
+  position: relative;
+  border-bottom: 1px dashed #666;
+}
+.shopping-cart img {
+  height: 4rem;
+  border-radius: 50%;
+}
+.shopping-cart h3 {
+  font-size: 1.4rem;
+}
+.shopping-cart .item-price {
+  font-size: 1.2rem;
+}
+.shopping-cart .cart-item #add,
+.shopping-cart .cart-item #remove {
+  display: inline-block;
+  padding: 2px 5px;
+  cursor: pointer;
+  margin: 0 8px;
+  background-color: black;
+  color: white;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+.shopping-cart h4 {
+  font-size: 1.6rem;
+  margin-top: -1rem;
+  text-align: center;
+}
+/* Checkout form */
+.form-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  border-top: 1px dashed black;
+  margin-top: 1rem;
+  padding: 1rem;
+}
+.form-container h5 {
+  text-align: center;
+  font-size: 1rem;
+}
+.form-container form {
+  width: 100%;
+  text-align: center;
+}
+.form-container label {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 1rem 0;
+}
+.form-container span {
+  text-align: right;
+}
+
+.form-container input {
+  background-color: #ddd;
+  padding: 5px;
+  font-size: 1rem;
+  width: 70%;
+}
+.form-container .checkout-button {
+  padding: 6px 14px;
+  background-color: royalblue;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  border-radius: 20px;
+  margin: 1rem auto;
+  cursor: pointer;
+}
+.form-container .checkout-button.disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+
+
+/* Hero Section */
+.hero {
+  min-height: 100vh;
+  /* supaya nanti main content ini berada persis di tengah hero nya  
+   secara vertikal makanya kta butuh sebuah displanya itu flex*/
+  display: flex;
+  /* ingat kalau secara vertikal ketengah itu align items */
+  /* kalau horizontal itu justify content itu agar ke tengah */
+  align-items: center;
+  background-image: url("../image/Espresso-bg\ .jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  mask-image: linear-gradient(rgba(0, 0, 0, 1) 85%, rgba(0, 0, 0, 0));
+  /* sebelum kita kasih style untuk tulisan */
+  /* saya ingin membuat agar bagian bawah dari gambar ini ada gradasi hitam
+  supaya nanti pada halaman ini saya scrol masuk ke elemen lain dibawahnya
+  itu nyambung karen skrg klo kita scrol pasti keliatan ga nyambung
+  maka kita kasih dulu seolah-olah pnjg halamannya di BODY di kasih min-height dikasih contoh 2000px */
+}
+/* .hero::after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 30%;
+  bottom: 0;
+  /* dan ini kita tempelin ke bawah karena untuk gradasi tombol cta */
+/* background: linear-gradient(0deg,rgba(1, 1, 0, 1) 8%, rgba(255, 255, 255, 0) 55%);
+} */
+/* background linear gradient ini untuk menggradasikan warna hitamnya agar menyatu dan keliatan natural dengan perpaduan warna yg sesuai yaitu rgba hitam dan campuran puith */
+/* jika disini kta position nya absolute mka elemen utamanya atau pembungkusnya
+  kita kasih positon yg non static juga kita kasih diatas ayaitu position relative
+  agar ngga menggangu posisi aslinya */
+
+/* selanjutnya kita fokus ke bagian isi atau content dari class hero */
+
+.hero .mask-container {
+  position: absolute;
+  /* background: salmon; */
+  inset: 0;
+  mask-image: url("../image/espresso.svg");
+  mask-repeat: no-repeat;
+  mask-size: cover;
+  mask-position: center;
+}
+
+.hero .content {
+  padding: 1.4rem 7%;
+  /* max-width: 60rem; */
+  width: 100%;
+  text-align: center;
+  position: fixed;
+  top: 130px;
+  /* samakan dengan ukuran navbar yaitu atas bawahnya 1.4 rem dan kiri kanannya 7% dan maxwidth nya 60rem agar tidak terlalu meped */
+}
+/* selanjutnya kita atur h1 nya */
+.hero .content h1 {
+  font-size: 5em;
+  color: #fff;
+  text-shadow: 1px 1px 3px rgba(1, 1, 3, 0.5);
+  line-height: 1.2;
+}
+/* Kata Kopi nya warnanya diganti */
+.hero .content h1 span {
+  color: var(--primary);
+}
+/* kemudian paragraf dibawahnya */
+.hero .content p {
+  font-size: 1.6rem;
+  margin-top: 1rem;
+  line-height: 1.4;
+  font-weight: 100;
+  text-shadow: 1px 1px 3px rgba(1, 1, 3, 0.5);
+  mix-blend-mode: difference;
+  /* mix blend mode ini bagus karena ketika paragraf tulisan
+  diatas dikecilkan dan ada yang tidak terbaca karena warna text nya sama yaitu
+  putih maka menjadi menyesuaikan warna kontrasnya dengan berubah otomatis
+  maka dari itu teks akan terbaca karena warnya kontras otomatis*/
+  /* tipisin teks make font weight */
+  /* kasih margin top supaya gak meped didkit */
+}
+/* terakhir kita membuat tombol cta nya */
+.hero .content .cta {
+  margin-top: 1rem;
+  display: inline-block;
+  padding: 1rem 3rem;
+  font-size: 1.4rem;
+  color: #fff;
+  background-color: var(--primary);
+  border-radius: 0.5rem;
+  box-shadow: 1px 1px 3px rgba(1, 1, 3, 0.5);
+  /* Sudut-sudut menjadi bulat dengan radius 0.5rem */
+  /* kita kasih display inline block agar bisa dikasih margin dan padding */
+  /* Bayangan dapat membantu meningkatkan visibilitas elemen, terutama jika elemen tersebut memiliki latar belakang yang mirip atau serupa dengan elemen-elemen di sekitarnya.   */
+}
+/* diatas yang cta klik ini masih belum bisa di klik karena ada
+lapisan yang menghalangi dimana supaya gradasinya kita bikin jangan
+penuh satu layar tapi cukup dibawah button klik cta (beli sekarang)
+makanya kita benerin dulu elemen after diatas di height dibuat 30% yang semula
+itu 100% */
+
+/* About Section */
+.about,
+.menu,
+.products,
+.contact {
+  padding: 8rem 7% 1.4rem;
+  /* sama sepeeti hero dan navbar kita kasih padding tapi agak beda karena disini
+saya akan bikin atasnya itu lebih tinggi supaya ketika kita klink linknya
+itu ga ngumpet dibelakang navbar jadi caranya kasih padding yg besar
+agar tentang kaminya itu keliatan dan ngga ngumpet*/
+  /* diatas itu atas nya 10rem kiri kanannya 7% dan bawahnya 1.4rem */
+}
+.about h2,
+.menu h2,
+.products h2,
+.contact h2 {
+  text-align: center;
+  font-size: 2.6rem;
+  margin-bottom: 3rem;
+}
+.about h2 span,
+.menu h2 span,
+.products h2 span,
+.contact span {
+  color: var(--primary);
+}
+.about .row {
+  display: flex;
+  /* dikasih flex supaya bersebelahan dengan text */
+}
+.about .row .about-img {
+  flex: 1 1 45rem;
+}
+.about .row .about-img img {
+  width: 100%;
+  mask-image: url("../image/splashh.svg");
+  mask-size: 50%;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  /* Width nya 100% agar memenuhi flex nya */
+}
+.about .row .content {
+  flex: 1 1 35rem;
+  padding: 0 1rem;
+}
+.about .row .content h3 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+.about .row .content p {
+  margin-bottom: 0.8rem;
+  font-size: 1.4rem;
+  font-weight: 100;
+  line-height: 1.6;
+}
+.products p {
+  margin-bottom: 0.8rem;
+  font-size: 1rem;
+  text-align: center;
+  font-weight: 100;
+  line-height: 1.6;
+}
+
+/* Menu Section */
+/* nah ini kita harus pepetin karena masih ikut h2 yang about diatas
+  coba kita timpa deh */
+.menu h2,
+.contact h2 {
+  margin-bottom: 1rem;
+}
+.menu p,
+.contact p {
+  text-align: center;
+  /* Lalu Kita kasih maxwidth supaya ngga terlalu lebar */
+  max-width: 30rem;
+  /* namun text masih disebelah kiri lalu kita kasih marginnya auto */
+  margin: auto;
+  font-weight: 100;
+  line-height: 1.6;
+  /* line height untuk atur tinggi baris sebesar 1.6kali ukuran font */
+}
+
+.menu .row {
+  display: flex; /*Supaya ngaturnya gampang*/
+  flex-wrap: wrap; /*supaya kalo dia kebanyakan dia langsung kebawah */
+  margin-top: 5rem; /*Kasih margin top supaya ga terlalu nempel keatas*/
+  justify-content: center;
+}
+.menu .row .menu-card {
+  text-align: center; /*atur teks agar ke tengah*/
+  padding-bottom: 4rem;
+}
+.menu .row .menu-card-img {
+  border-radius: 50%; /*kita kasih border radius 50% agar bulat */
+  width: 80%;
+}
+.menu .row .menu-card .menu-card-title {
+  margin: 1rem auto 0.5rem;
+}
+/* Karena terlalu meped maka kita kasih padding dalam gambar
+agar tidak terlalu meped */
+
+/* Product Section */
+.products .row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+  /* untuk mengatur ukurannya langsung responsive yaitu grid template columns  */
+  gap: 1.5rem;
+  margin-top: 4rem;
+}
+.products .product-card {
+  text-align: center;
+  border: 1px solid #666;
+  padding: 2rem;
+}
+.products .product-icons {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.products .product-icons a {
+  width: 4rem;
+  height: 4rem;
+  color: #fff;
+  margin: 0.3rem;
+  border: 1px solid #666;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  /* justify-content itu untuk bikin element ke tengah secara horizontal  */
+  align-items: center;
+  /* align- items itu untuk bikin element ke tengah secara vertical */
+}
+.products .product-icons a:hover {
+  background-color: var(--primary);
+  border: 1px solid var(--primary);
+}
+.products .product-image {
+  padding: 1rem 0;
+}
+.products .product-image img {
+  height: 25rem;
+}
+.products .product-content h3 {
+  font-size: 2rem;
+}
+.products .product-stars {
+  font-size: 1.7rem;
+  padding: 0.8rem;
+  color: var(--primary);
+}
+.products .product-stars .star {
+  fill: var(--primary);
+}
+.products .product-price {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+/* Contact Session */
+.contact .row {
+  display: flex;
+  margin-top: 2rem;
+  background-color: #222;
+}
+.contact .row .map {
+  flex: 1 1 45rem;
+  width: 100%;
+  object-fit: cover;
+}
+.contact .row form {
+  flex: 1 1 45rem;
+  padding: 5rem 2rem; /*atas bawahnya 5rem kiri kannya 2rem 5rem agak gede biar inputannya*/
+  text-align: center; /*agar teks ke tengah*/
+}
+.contact .row form .input-group {
+  display: flex;
+  align-items: center;
+  margin-top: 2rem;
+  background-color: var(--bg);
+  border: 1px solid #eee;
+  padding-left: 2rem;
+  /*karena disini text dan mapnya ngga berdampingan karena ngaruh dari flex warpnya yang langsung kebawah text maka
+  flex warp nya dihapus dulu lalu disimpan untuk responsif saja */
+}
+.contact .row form .input-group input {
+  width: 100%;
+  padding: 2rem;
+  font-size: 1.7rem;
+  background: none;
+  color: #fff;
+}
+.contact .row form .btn {
+  margin-top: 3rem;
+  display: inline-block;
+  padding: 1rem 3rem;
+  font-size: 1.7rem;
+  color: #fff;
+  background-color: var(--primary);
+  cursor: pointer;
+}
+/* Footer */
+footer {
+  background-color: var(--primary);
+  text-align: center;
+  padding: 1rem 0 3rem;
+  margin-top: 3rem;
+}
+footer .socials {
+  padding: 1rem 0;
+  /* disini karena footernya terlalu keatas gamau kebawah makan min-heigtnya sekarang
+baru boleh dihapus yang ada pada body */
+}
+/* disini karena saya ingin ikon nya berwarna putih maka */
+footer .socials a {
+  color: #fff; /*lalu supaya ada jarak kiri kanan kita kasih margin nya 1rem*/
+  margin: 1rem;
+}
+/* lalu saat ketika di hover ikonnya berwarna item maka kita harus */
+footer .socials a:hover,
+footer .links a:hover {
+  color: var(--bg);
+}
+/* lalu kita kasih margin bottom untuk links nya */
+footer .links {
+  margin-bottom: 1.4rem;
+}
+/* lalu ketika kita ingin ubah bagian menu maka */
+footer .links a {
+  color: #fff;
+  padding: 0.7rem 1rem;
+}
+footer .credit {
+  font-size: 0.8rem;
+}
+footer .credit a {
+  color: var(--bg);
+  font-weight: 700; /*font weight juga bisa mengatur ketebalan*/
+}
+/* Modal Box */
+/* Item detail */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+.modal-container {
+  position: relative;
+  background-color: #fefefe;
+  color: var(--bg);
+  margin: 15% auto;
+  padding: 1.2rem;
+  border: 1px solid #666;
+  width: 80%;
+  animation: animateModal 0.5s;
+}
+/* Modal animation */
+@keyframes animateModal {
+  from {
+    top: -300px;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
+  }
+}
+.modal-container .close-icon {
+  position: absolute;
+  right: 1rem;
+}
+.modal-content {
+  display: flex;
+  flex-wrap: nowrap;
+}
+.modal-content img {
+  height: 20rem;
+  margin-right: 2rem;
+  margin-bottom: 2rem;
+}
+.modal-content p {
+  font-size: 1.2rem;
+  line-height: 1.8rem;
+  margin-top: 1.2rem;
+}
+.modal-content a {
+  display: flex;
+  gap: 1rem;
+  width: 12rem;
+  background-color: var(--primary);
+  color: #fff;
+  margin-top: 1rem;
+  padding: 1rem 1.6rem;
+}
+/* Media Queries */
+
+/* Laptop */
+@media (max-width: 1366px) {
+  html {
+    font-size: 75%;
+  }
+}
+
+/* Tablet */
+
+@media (max-width: 768px) {
+  html {
+    font-size: 62.5%;
+  }
+  #hamburger-menu {
+    display: inline-block;
+  }
+  /* diatas berfungsi ketika lebar layar dikecilkan maka menu hamburger akan muncul */
+  .navbar .navbar-nav {
+    position: absolute;
+    top: 100%; /*100 prsen karena agar nempel ke atas*/
+    right: -100%; /*supaya keluar dri layar*/
+    background-color: #fff;
+    width: 30rem;
+    height: 100vh;
+    transition: 0.3s;
+  }
+
+  .navbar .navbar-nav.active {
+    right: 0;
+  }
+  .navbar .navbar-nav a {
+    color: var(--bg);
+    display: block;
+    margin: 1.5rem;
+    padding: 0.5rem;
+    font-size: 2rem;
+  }
+  /* agar garis bawah nya digeser ke kiri agar sesuai dengan navbar diatas */
+  .navbar .navbar-nav a::after {
+    transform-origin: 0 0;
+  }
+  .navbar .navbar-nav a:hover::after {
+    transform: scaleX(0.2);
+  }
+  .about .row {
+    flex-wrap: wrap;
+    /* flex warp disini itu supaya turun kebawah ketika layar 
+    dikecilkan seukuran tablet maka teks akan dibawah gambar dan rapi */
+  }
+  /* dan saya akan membuat gambarnya tidak terlalu tinggi saya buat
+   disini */
+  .about .row .about-img img {
+    height: 24rem;
+    object-fit: cover;
+    object-position: center;
+  }
+  .about .row .content {
+    /* supaya sejajar teksnya dengan gambar maka padding nya diilangin */
+    padding: 0;
+  }
+  .about .row .content h3 {
+    /* supaya h3 nya dikasih jarak */
+    margin-top: 1rem;
+    font-size: 2rem;
+  }
+  .about .row .content p {
+    font-size: 1.6rem;
+  }
+  .menu p {
+    font-size: 1.2rem;
+  }
+  .contact .row {
+    flex-wrap: wrap; /*disini baru diletakan flex warp agar ketika web dibuka dengan ukuran tablet maka text 
+    rapi ke bawah*/
+  }
+  .contact .row .map {
+    height: 30rem; /*disini karena map dan form nya ada jarak maka harus dikenakan padding top nya nol (0) agar gambar map menempel pada form input*/
+  }
+  .contact .row form {
+    padding-top: 0;
+  }
+  .modal-content {
+    flex-wrap: wrap;
+  }
+
+
+  /* diatas mengapa perlu karena paragraf ketika layar dikecilkan sukuran tablet atau hp ukuran teks nya kecil maka dari itu kita atur font size yang ada pada tablet */
+}
+/* Mobile Phone */
+@media (max-width: 450px) {
+  html {
+    font-size: 55%;
+  }
+}
